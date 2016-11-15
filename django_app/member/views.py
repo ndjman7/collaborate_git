@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView
+from django.views.generic import RedirectView
 
 from gram import settings
 
@@ -45,10 +46,12 @@ class LoginView(FormView):
             return redirect(settings.LOGIN_URL)
 
 
-class LogoutView(View):
-    def get(self, request):
+class LogoutView(RedirectView):
+    url = '/photo/photo_list/'
+
+    def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect('photo:photo_list')
+        return super().get(request, *args, **kwargs)
 
 
 class LoginFormView(FormView):

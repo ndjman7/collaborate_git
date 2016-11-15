@@ -21,6 +21,9 @@
         <a href="{%url 'photo:photo_detail' pk=photo.pk%}">
             <img src="{{photo.image.url}}" alt="">
         </a>
+        <form action="{% url 'photo:photo_delete' pk=photo.pk %}" >{% csrf_token %}
+            <button type="submit">사진삭제</button>
+        </form>
     {% endfor %}
 
 

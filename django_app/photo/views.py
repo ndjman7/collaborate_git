@@ -5,10 +5,7 @@ from django.urls import reverse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import CreateView
-from django.views.generic import DetailView
-from django.views.generic import FormView
-from django.views.generic import ListView
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView
 from django.views.generic.detail import SingleObjectMixin
 
 from photo.models import Photo, PhotoComment
@@ -83,4 +80,9 @@ class PhotoDetail(DetailView):
         view = AddComment.as_view()
         return view(request, *args, **kwargs)
 
+
+class PhotoDelete(DeleteView):
+    template_name = 'photo/photo_delete.html'
+    model = Photo
+    success_url = reverse_lazy('photo:photo_list')
 

@@ -48,7 +48,7 @@ class LoginView(FormView):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect(settings.LOGIN_URL)
+        return redirect('photo:photo_list')
 
 
 class LoginFormView(FormView):

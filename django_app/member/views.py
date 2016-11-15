@@ -6,8 +6,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import FormView
-
 from gram import settings
+from .forms import SignupForm
+from django.contrib.auth import get_user_model
 
 
 class LoginForm(forms.Form):
@@ -33,7 +34,6 @@ class LoginView(FormView):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -66,3 +66,34 @@ class LoginFormView(FormView):
         else:
             return HttpResponse("Inactive user.")
         return super().form_valid(form)
+
+
+
+
+        ###################################
+        ############# Sign up #############
+        ###################################
+
+def signup(request):
+    User = get_user_model()
+    context = {}
+    if request.method == 'POST':
+        form = SignupForm(request.POST, request.FILES)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            img_profile = form.cleaned_data['img_profile']
+
+            user = User.objects.create_user(
+                username=username,
+                password=password,
+                img_profile=img_profile
+            )
+
+            login(request, user)
+            return redirect('photo:photo_list')
+        context['form'] = form
+    else:
+        context['form'] = SignupForm()
+
+    return render(request, 'member/signup.html', context)
